@@ -30,8 +30,21 @@ export async function POST(request: NextRequest) {
   const yDoc = new Y.Doc();
   Y.applyUpdate(yDoc, new Uint8Array(await res.arrayBuffer()));
 
-  // 3. Apply changes
-  yDoc.getText(field).insert(0, text);
+  // 3. Apply changes — build proper Tiptap/ProseMirror XML structure
+  const fragment = yDoc.getXmlFragment(field);
+
+  // Clear existing content
+  if (fragment.length > 0) {
+    fragment.delete(0, fragment.length);
+  }
+
+  // Build paragraph node matching Tiptap's ProseMirror schema
+  const paragraph = new Y.XmlElement("paragraph");
+  const textNode = new Y.XmlText();
+  textNode.insert(0, text);
+  paragraph.insert(0, [textNode]);
+
+  fragment.insert(0, [paragraph]);
 
   // 4. Send update back
   const updateRes = await fetch(`${baseUrl}/rooms/${roomId}/ydoc`, {

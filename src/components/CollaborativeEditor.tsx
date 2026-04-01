@@ -55,13 +55,13 @@ function TiptapEditor({ doc, provider }: EditorProps) {
       Collaboration.configure({
         document: doc,
         // Store content in a custom named fragment in the Yjs document
-        field: "content",
+        field: "updatedBy",
       }),
-      // Attach provider and user info for collaborative cursors
-      CollaborationCaret.configure({
-        provider: provider,
-        user: userInfo,
-      }),
+      // // Attach provider and user info for collaborative cursors
+      // CollaborationCaret.configure({
+      //   provider: provider,
+      //   user: userInfo,
+      // }),
     ],
   });
 
