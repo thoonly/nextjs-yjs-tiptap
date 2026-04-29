@@ -1,0 +1,102 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.roomInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.roomLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.roomId {
+  font-size: 0.75rem;
+  background: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: #374151;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copyButton {
+  padding: 0.25rem 0.5rem;
+  background-color: #e0e7ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4338ca;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.copyButton:hover {
+  background-color: #c7d2fe;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.leaveButton {
+  padding: 0.5rem 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #dc2626;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.leaveButton:hover {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.logoutButton {
+  padding: 0.5rem 1rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.logoutButton:hover {
+  background-color: #e5e7eb;
+  border-color: #9ca3af;
+}

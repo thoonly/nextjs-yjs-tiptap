@@ -11,8 +11,9 @@
 
 .editorHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .editor {
@@ -29,7 +30,8 @@
 
 .editorContainer {
   position: relative;
-  height: 100%;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .placeholder {
@@ -42,4 +44,30 @@
 
 .editor p {
   margin: 1em 0;
+}
+
+/* Collaboration cursor styles */
+.editor :global(.collaboration-cursor__caret) {
+  position: relative;
+  margin-left: -1px;
+  margin-right: -1px;
+  border-left: 1px solid;
+  border-right: 1px solid;
+  word-break: normal;
+  pointer-events: none;
+}
+
+.editor :global(.collaboration-cursor__label) {
+  position: absolute;
+  top: -1.4em;
+  left: -1px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: normal;
+  white-space: nowrap;
+  color: #fff;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px 3px 3px 0;
+  user-select: none;
+  pointer-events: none;
 }

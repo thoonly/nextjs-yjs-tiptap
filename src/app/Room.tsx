@@ -1,37 +1,44 @@
 "use client";
 
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useCallback } from "react";
 import { RoomProvider } from "@liveblocks/react/suspense";
-import { useSearchParams } from "next/navigation";
+import { LiveblocksProvider } from "@liveblocks/react";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { Loading } from "@/components/Loading";
 
-export function Room({ children }: { children: ReactNode }) {
-  const roomId = useExampleRoomId("liveblocks:examples:nextjs-yjs-tiptap");
+type UserData = {
+  name: string;
+  color: string;
+};
+
+type RoomProps = {
+  children: ReactNode;
+  user: UserData;
+  roomId: string;
+};
+
+export function Room({ children, user, roomId }: RoomProps) {
+  const authEndpoint = useCallback(async () => {
+    const response = await fetch("/api/liveblocks-auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user }),
+    });
+    return await response.json();
+  }, [user]);
 
   return (
-    <RoomProvider
-      id={roomId}
-      initialPresence={{
-        cursor: null,
-      }}
-    >
-      <ClientSideSuspense fallback={<Loading />}>{children}</ClientSideSuspense>
-    </RoomProvider>
+    <LiveblocksProvider authEndpoint={authEndpoint}>
+      <RoomProvider
+        id={roomId}
+        initialPresence={{
+          cursor: null,
+        }}
+      >
+        <ClientSideSuspense fallback={<Loading />}>{children}</ClientSideSuspense>
+      </RoomProvider>
+    </LiveblocksProvider>
   );
-}
-
-/**
- * This function is used when deploying an example on liveblocks.io.
- * You can ignore it completely if you run the example locally.
- */
-function useExampleRoomId(roomId: string) {
-  const params = useSearchParams();
-  const exampleId = params?.get("exampleId");
-
-  const exampleRoomId = useMemo(() => {
-    return exampleId ? `${roomId}-${exampleId}` : roomId;
-  }, [roomId, exampleId]);
-
-  return exampleRoomId;
 }

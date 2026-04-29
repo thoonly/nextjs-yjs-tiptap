@@ -9,10 +9,13 @@ import { getYjsProviderForRoom } from "@liveblocks/yjs";
 import { useRoom, useSelf } from "@liveblocks/react/suspense";
 import { Toolbar } from "./Toolbar";
 import styles from "./CollaborativeEditor.module.css";
-import { Avatars } from "@/components/Avatars";
+
+type CollaborativeEditorProps = {
+  field?: string;
+};
 
 // Collaborative text editor with simple rich text, live cursors, and live avatars
-export function CollaborativeEditor() {
+export function CollaborativeEditor({ field = "content" }: CollaborativeEditorProps) {
   const room = useRoom();
   // Set up Liveblocks Yjs provider
   const provider = getYjsProviderForRoom(room);
@@ -22,16 +25,17 @@ export function CollaborativeEditor() {
   }
 
   const doc = provider.getYDoc();
-  
-  return <TiptapEditor doc={doc} provider={provider} />;
+
+  return <TiptapEditor doc={doc} provider={provider} field={field} />;
 }
 
 type EditorProps = {
   doc: Y.Doc;
   provider: any;
+  field: string;
 };
 
-function TiptapEditor({ doc, provider }: EditorProps) {
+function TiptapEditor({ doc, provider, field }: EditorProps) {
   // Get user info from Liveblocks authentication endpoint
   const userInfo = useSelf((me) => me.info);
 
@@ -55,20 +59,24 @@ function TiptapEditor({ doc, provider }: EditorProps) {
       Collaboration.configure({
         document: doc,
         // Store content in a custom named fragment in the Yjs document
-        field: "updatedBy",
+        field: field,
       }),
-      // // Attach provider and user info for collaborative cursors
-      // CollaborationCaret.configure({
-      //   provider: provider,
-      //   user: userInfo,
-      // }),
+      // Attach provider and user info for collaborative cursors
+      CollaborationCaret.configure({
+        provider: provider,
+        user: userInfo,
+      }),
     ],
   });
 
   return (
     <div className={styles.container}>
- 
-      <EditorContent editor={editor}  />
+      <div className={styles.editorHeader}>
+        <Toolbar editor={editor} />
+      </div>
+      <div className={styles.editorContainer}>
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }

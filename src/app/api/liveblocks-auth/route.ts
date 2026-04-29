@@ -10,63 +10,37 @@ const liveblocks = new Liveblocks({
   secret: process.env.LIVEBLOCKS_SECRET_KEY!,
 });
 
+// Generate a cartoon avatar URL using DiceBear API with custom background color
+function getCartoonAvatar(seed: string, color: string): string {
+  // Remove the # from hex color for the URL parameter
+  const backgroundColor = color.replace("#", "");
+  return `https://api.dicebear.com/9.x/dylan/svg?seed=${encodeURIComponent(seed)}&backgroundColor=${backgroundColor}`;
+}
+
 export async function POST(request: NextRequest) {
-  // Get the current user's unique id from your database
-  const userId = Math.floor(Math.random() * 10) % USER_INFO.length;
+  const body = await request.json();
+  const { user } = body;
+
+  // Generate a unique user ID based on name and timestamp for session uniqueness
+  const userId = `user-${user.name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`;
+
+  // Generate cartoon avatar with user's color as background
+  const avatar = getCartoonAvatar(user.name, user.color);
 
   // Create a session for the current user
   // userInfo is made available in Liveblocks presence hooks, e.g. useOthers
-  const session = liveblocks.prepareSession(`user-${userId}`, {
-    userInfo: USER_INFO[userId],
+  const session = liveblocks.prepareSession(userId, {
+    userInfo: {
+      name: user.name,
+      color: user.color,
+      picture: avatar,
+    },
   });
 
   // Use a naming pattern to allow access to rooms with a wildcard
-  session.allow(`liveblocks:examples:*`, session.FULL_ACCESS);
+  session.allow(`*`, session.FULL_ACCESS);
 
   // Authorize the user and return the result
-  const { body, status } = await session.authorize();
-  return new Response(body, { status });
+  const { body: authBody, status } = await session.authorize();
+  return new Response(authBody, { status });
 }
-
-const USER_INFO = [
-  {
-    name: "Charlie Layne",
-    color: "#D583F0",
-    picture: "https://liveblocks.io/avatars/avatar-1.png",
-  },
-  {
-    name: "Mislav Abha",
-    color: "#F08385",
-    picture: "https://liveblocks.io/avatars/avatar-2.png",
-  },
-  {
-    name: "Tatum Paolo",
-    color: "#F0D885",
-    picture: "https://liveblocks.io/avatars/avatar-3.png",
-  },
-  {
-    name: "Anjali Wanda",
-    color: "#85EED6",
-    picture: "https://liveblocks.io/avatars/avatar-4.png",
-  },
-  {
-    name: "Jody Hekla",
-    color: "#85BBF0",
-    picture: "https://liveblocks.io/avatars/avatar-5.png",
-  },
-  {
-    name: "Emil Joyce",
-    color: "#8594F0",
-    picture: "https://liveblocks.io/avatars/avatar-6.png",
-  },
-  {
-    name: "Jory Quispe",
-    color: "#85DBF0",
-    picture: "https://liveblocks.io/avatars/avatar-7.png",
-  },
-  {
-    name: "Quinn Elton",
-    color: "#87EE85",
-    picture: "https://liveblocks.io/avatars/avatar-8.png",
-  },
-];
