@@ -9,10 +9,11 @@ const ROOM_STORAGE_KEY = "liveblocks-room";
 
 type NavbarProps = {
   roomId: string;
+  userName: string;
   onLeaveRoom: () => void;
 };
 
-export function Navbar({ roomId, onLeaveRoom }: NavbarProps) {
+export function Navbar({ roomId, userName, onLeaveRoom }: NavbarProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopyRoomId = async () => {
@@ -44,6 +45,7 @@ export function Navbar({ roomId, onLeaveRoom }: NavbarProps) {
         </div>
       </div>
       <div className={styles.right}>
+        <span className={styles.userName}>{userName}</span>
         <Avatars />
         <button onClick={onLeaveRoom} className={styles.leaveButton}>
           Leave Room

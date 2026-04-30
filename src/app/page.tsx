@@ -70,7 +70,7 @@ export default function Home() {
     <main className={styles.main}>
       <Room user={user} roomId={roomId}>
         <div className={styles.container}>
-          <Navbar roomId={roomId} onLeaveRoom={handleLeaveRoom} />
+          <Navbar roomId={roomId} userName={user.name} onLeaveRoom={handleLeaveRoom} />
           <div className={styles.columns}>
             <div className={styles.column}>
               <CollaborativeEditor field="input" />

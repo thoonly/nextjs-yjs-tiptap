@@ -61,6 +61,12 @@
   background-color: #c7d2fe;
 }
 
+.userName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
 .right {
   display: flex;
   align-items: center;
